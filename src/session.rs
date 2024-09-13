@@ -1,6 +1,5 @@
 
 use napi::bindgen_prelude::*;
-use napi::*;
 use napi_derive::napi;
 use super::OlmMessage;
 

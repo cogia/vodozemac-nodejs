@@ -1,2 +1,3 @@
-# vodozemac-nodejs
-Matrix vodozemac olm engine NodeJs implementation
+vodozemac-nodejs
+=====
+Matrix vodozemac olm engine NodeJs implementation by `Cogia Intelligence`

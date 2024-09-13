@@ -112,6 +112,7 @@ impl Account {
         Ok(serde_json::to_string(&keys).unwrap())
     }
 
+    #[napi]
     pub fn generate_one_time_keys(&mut self, count: u32) {
         self.inner.generate_one_time_keys(count.try_into().unwrap());
         ;
