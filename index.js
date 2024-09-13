@@ -310,6 +310,9 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { OlmMessage } = nativeBinding
+const { Account, InboundCreationResult, Session, OlmMessage } = nativeBinding
 
+module.exports.Account = Account
+module.exports.InboundCreationResult = InboundCreationResult
+module.exports.Session = Session
 module.exports.OlmMessage = OlmMessage

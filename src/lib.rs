@@ -3,10 +3,11 @@
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
-#[napi]
-pub fn throw_error() -> Result<()> {
-    Err(Error::new(Status::GenericFailure, "Manual Error".to_owned()))
-}
+mod account;
+mod session;
+
+pub use account::Account;
+pub use session::Session;
 
 #[napi]
 pub struct OlmMessage {
