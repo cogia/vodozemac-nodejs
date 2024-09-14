@@ -78,9 +78,9 @@ impl Account {
     }
 
     #[napi]
-    pub fn from_libolm_pickle(pickle: String, pickle_key: &[u8]) -> Result<Account> {
+    pub fn from_libolm_pickle(pickle: String, pickle_key: String) -> Result<Account> {
         let inner =
-            vodozemac::olm::Account::from_libolm_pickle(&pickle, pickle_key)
+            vodozemac::olm::Account::from_libolm_pickle(&pickle, &pickle_key.as_bytes())
                 .map_err(|_| Error::new(Status::GenericFailure, "Invalid data"))?;
 
         Ok(Self { inner })

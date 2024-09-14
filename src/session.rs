@@ -1,6 +1,7 @@
 
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
+use vodozemac::{base64_decode, base64_encode};
 use super::OlmMessage;
 
 #[napi]
@@ -11,19 +12,23 @@ pub struct Session {
 // Error::new(Status::GenericFailure, err)
 #[napi]
 impl Session {
-    pub fn pickle(&self, pickle_key: &[u8]) -> Result<String> {
+    #[napi]
+    pub fn pickle(&self, pickle_key: String) -> Result<String> {
         let pickle_key: &[u8; 32] = pickle_key
+            .as_bytes()
             .try_into()
             .map_err(|_| Error::new(Status::GenericFailure, "Invalid pickle key length, expected 32 bytes"))?;
 
         Ok(self.inner.pickle().encrypt(pickle_key))
     }
 
-    pub fn from_pickle(pickle: &str, pickle_key: &[u8]) -> Result<Session> {
+    #[napi]
+    pub fn from_pickle(pickle: String, pickle_key: String) -> Result<Session> {
         let pickle_key: &[u8; 32] = pickle_key
+            .as_bytes()
             .try_into()
             .map_err(|_| Error::new(Status::GenericFailure, "Invalid pickle key length, expected 32 bytes"))?;
-        let pickle = vodozemac::olm::SessionPickle::from_encrypted(pickle, pickle_key)
+        let pickle = vodozemac::olm::SessionPickle::from_encrypted(&pickle, pickle_key)
             .map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
 
         let session = vodozemac::olm::Session::from_pickle(pickle);
@@ -31,9 +36,10 @@ impl Session {
         Ok(Self { inner: session })
     }
 
-    pub fn from_libolm_pickle(pickle: &str, pickle_key: &[u8]) -> Result<Session> {
+    #[napi]
+    pub fn from_libolm_pickle(pickle: String, pickle_key: String) -> Result<Session> {
         let session =
-            vodozemac::olm::Session::from_libolm_pickle(pickle, pickle_key).map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
+            vodozemac::olm::Session::from_libolm_pickle(&pickle, &pickle_key.as_bytes()).map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
 
         Ok(Self { inner: session })
     }
@@ -43,6 +49,7 @@ impl Session {
         self.inner.session_id()
     }
 
+    #[napi]
     pub fn session_matches(&self, message: &OlmMessage) -> bool {
         let message =
             vodozemac::olm::OlmMessage::from_parts(message.message_type.try_into().unwrap(), &message.ciphertext.as_bytes());
@@ -59,17 +66,19 @@ impl Session {
         }
     }
 
-    pub fn encrypt(&mut self, plaintext: &str) -> OlmMessage {
+    #[napi]
+    pub fn encrypt(&mut self, plaintext: String) -> OlmMessage {
         let message = self.inner.encrypt(plaintext);
 
         let (message_type, ciphertext) = message.to_parts();
 
         OlmMessage {
-            ciphertext: String::from_utf8(ciphertext).unwrap(),
+            ciphertext: base64_encode(ciphertext), //String::from_utf8_lossy(&ciphertext).into_owned(),
             message_type: message_type.try_into().unwrap(),
         }
     }
 
+    #[napi]
     pub fn decrypt(&mut self, message: &OlmMessage) -> Result<String> {
         /*let _message =
             vodozemac::olm::OlmMessage::from_parts(message.message_type.try_into().unwrap(), &message.ciphertext.as_bytes())
@@ -78,7 +87,7 @@ impl Session {
         Ok(self.inner.decrypt(&_message).map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?)*/
         let _message = vodozemac::olm::OlmMessage::from_parts(
             message.message_type.try_into().unwrap(),
-            message.ciphertext.as_bytes(),
+            &base64_decode(&message.ciphertext).unwrap()
         )
             .map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
 

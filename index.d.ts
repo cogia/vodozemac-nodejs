@@ -11,7 +11,7 @@ export declare class Account {
   constructor()
   identityKeys(): IdentityKeys
   static fromPickle(pickle: string, pickleKey: string): Account
-  static fromLibolmPickle(pickle: string, pickleKey: Uint8Array): Account
+  static fromLibolmPickle(pickle: string, pickleKey: string): Account
   pickle(pickleKey: string): string
   get ed25519Key(): string
   get curve25519Key(): string
@@ -27,7 +27,13 @@ export declare class Account {
 }
 export declare class InboundCreationResult { }
 export declare class Session {
+  pickle(pickleKey: string): string
+  static fromPickle(pickle: string, pickleKey: string): Session
+  static fromLibolmPickle(pickle: string, pickleKey: string): Session
   get sessionId(): string
+  sessionMatches(message: OlmMessage): boolean
+  encrypt(plaintext: string): OlmMessage
+  decrypt(message: OlmMessage): string
 }
 export declare class Sas {
   constructor()
