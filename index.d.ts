@@ -5,12 +5,20 @@
 
 export declare class Account {
   constructor()
+  static fromPickle(pickle: string, pickleKey: Uint8Array): Account
+  static fromLibolmPickle(pickle: string, pickleKey: Uint8Array): Account
+  pickle(pickleKey: Uint8Array): string
   get ed25519Key(): string
   get curve25519Key(): string
+  sign(message: string): string
   get maxNumberOfOneTimeKeys(): number
   get oneTimeKeys(): string
   generateOneTimeKeys(count: number): void
   get fallbackKey(): string
+  generateFallbackKey(): void
+  markKeysAsPublished(): void
+  createOutboundSession(identityKey: string, oneTimeKey: string): Session
+  createInboundSession(identityKey: string, message: OlmMessage): InboundCreationResult
 }
 export declare class InboundCreationResult { }
 export declare class Session {

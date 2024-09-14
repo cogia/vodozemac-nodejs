@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use napi::bindgen_prelude::*;
-use napi::*;
 use napi_derive::napi;
 use vodozemac::olm::SessionConfig;
 
@@ -51,12 +50,12 @@ impl Account {
             inner: vodozemac::olm::Account::new(),
         }
     }
-
-    pub fn from_pickle(pickle: &str, pickle_key: &[u8]) -> Result<Account> {
+    #[napi]
+    pub fn from_pickle(pickle: String, pickle_key: &[u8]) -> Result<Account> {
         let pickle_key: &[u8; 32] = pickle_key.try_into()
             .map_err(|err: _| Error::new(Status::GenericFailure, err))?;
 
-        let pickle = vodozemac::olm::AccountPickle::from_encrypted(pickle, pickle_key)
+        let pickle = vodozemac::olm::AccountPickle::from_encrypted(&pickle, pickle_key)
             .map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
 
 
@@ -65,14 +64,16 @@ impl Account {
         Ok(Self { inner })
     }
 
-    pub fn from_libolm_pickle(pickle: &str, pickle_key: &[u8]) -> Result<Account> {
+    #[napi]
+    pub fn from_libolm_pickle(pickle: String, pickle_key: &[u8]) -> Result<Account> {
         let inner =
-            vodozemac::olm::Account::from_libolm_pickle(pickle, pickle_key)
-                .map_err(|_| Error::new(Status::GenericFailure, "Invalid data"))?;  ;
+            vodozemac::olm::Account::from_libolm_pickle(&pickle, pickle_key)
+                .map_err(|_| Error::new(Status::GenericFailure, "Invalid data"))?;
 
         Ok(Self { inner })
     }
 
+    #[napi]
     pub fn pickle(&self, pickle_key: &[u8]) -> Result<String> {
         let pickle_key: &[u8; 32] = pickle_key
             .try_into()
@@ -91,8 +92,9 @@ impl Account {
         self.inner.curve25519_key().to_base64()
     }
 
-    pub fn sign(&self, message: &str) -> String {
-        self.inner.sign(message).to_base64()
+    #[napi]
+    pub fn sign(&self, message: String) -> String {
+        self.inner.sign(&message).to_base64()
     }
 
     #[napi(getter)]
@@ -115,7 +117,6 @@ impl Account {
     #[napi]
     pub fn generate_one_time_keys(&mut self, count: u32) {
         self.inner.generate_one_time_keys(count.try_into().unwrap());
-        ;
     }
 
     #[napi(getter)]
@@ -130,24 +131,27 @@ impl Account {
         Ok(serde_json::to_string(&keys).unwrap())
     }
 
+    #[napi]
     pub fn generate_fallback_key(&mut self) {
         self.inner.generate_fallback_key()
         ;
     }
 
+    #[napi]
     pub fn mark_keys_as_published(&mut self) {
         self.inner.mark_keys_as_published()
     }
 
+    #[napi]
     pub fn create_outbound_session(
         &self,
-        identity_key: &str,
-        one_time_key: &str,
+        identity_key: String,
+        one_time_key: String,
     ) -> Result<Session> {
         let identity_key =
-            vodozemac::Curve25519PublicKey::from_base64(identity_key).map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
+            vodozemac::Curve25519PublicKey::from_base64(&identity_key).map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
         let one_time_key =
-            vodozemac::Curve25519PublicKey::from_base64(one_time_key).map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
+            vodozemac::Curve25519PublicKey::from_base64(&one_time_key).map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
         let session = self
             .inner
             .create_outbound_session(SessionConfig::version_2(), identity_key, one_time_key);
@@ -155,13 +159,14 @@ impl Account {
         Ok(Session { inner: session })
     }
 
+    #[napi]
     pub fn create_inbound_session(
         &mut self,
-        identity_key: &str,
+        identity_key: String,
         message: &OlmMessage,
     ) -> Result<InboundCreationResult> {
         let identity_key =
-            vodozemac::Curve25519PublicKey::from_base64(identity_key).unwrap();
+            vodozemac::Curve25519PublicKey::from_base64(&identity_key).unwrap();
 
         let message =
             vodozemac::olm::OlmMessage::from_parts(message.message_type.try_into().unwrap(), &message.ciphertext.as_bytes()).unwrap();
