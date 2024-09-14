@@ -1,11 +1,11 @@
 use std::collections::HashMap;
-
 use napi::bindgen_prelude::*;
+use napi::JsObject;
 use napi_derive::napi;
 use vodozemac::olm::SessionConfig;
 
 
-use super::{session::Session, OlmMessage};
+use super::{session::Session, OlmMessage, IdentityKeys};
 
 #[napi]
 pub struct Account {
@@ -51,8 +51,21 @@ impl Account {
         }
     }
     #[napi]
-    pub fn from_pickle(pickle: String, pickle_key: &[u8]) -> Result<Account> {
-        let pickle_key: &[u8; 32] = pickle_key.try_into()
+    pub fn identity_keys(&self) -> Result<IdentityKeys> {
+        let identity_keys = self.inner.identity_keys();//.map_err(|_| {});
+        Ok(
+            IdentityKeys {
+                ed25519: identity_keys.ed25519.to_base64(),
+                curve25519: identity_keys.curve25519.to_base64(),
+            }
+        )
+    }
+
+    #[napi]
+    pub fn from_pickle(pickle: String, pickle_key: String) -> Result<Account> {
+        let pickle_key: &[u8; 32] = pickle_key
+            .as_bytes()
+            .try_into()
             .map_err(|err: _| Error::new(Status::GenericFailure, err))?;
 
         let pickle = vodozemac::olm::AccountPickle::from_encrypted(&pickle, pickle_key)
@@ -74,8 +87,9 @@ impl Account {
     }
 
     #[napi]
-    pub fn pickle(&self, pickle_key: &[u8]) -> Result<String> {
+    pub fn pickle(&self, pickle_key: String) -> Result<String> {
         let pickle_key: &[u8; 32] = pickle_key
+            .as_bytes()
             .try_into()
             .map_err(|_| Error::from_reason("Invalid pickle key length, expected 32 bytes"))?;
 
@@ -102,16 +116,21 @@ impl Account {
         self.inner.max_number_of_one_time_keys().try_into().unwrap()
     }
 
-    #[napi(getter)]
-    pub fn one_time_keys(&self) -> Result<String> {
-        let keys: HashMap<_, _> = self
+    #[napi(getter, ts_return_type = "Record<string, string>")]
+    pub fn one_time_keys(&self, env: Env) -> Result<JsObject> {
+        let _keys: HashMap<_, _> = self
             .inner
             .one_time_keys()
             .into_iter()
             .map(|(k, v)| (k.to_base64(), v.to_base64()))
             .collect();
 
-        Ok(serde_json::to_string(&keys).unwrap())
+        let mut res = env.create_object().unwrap();
+        for (key, value) in _keys.iter() {
+            res.set(key, value)?;
+        }
+
+        Ok(res)
     }
 
     #[napi]
@@ -120,15 +139,19 @@ impl Account {
     }
 
     #[napi(getter)]
-    pub fn fallback_key(&self) -> Result<String> {
-        let keys: HashMap<String, String> = self
+    pub fn fallback_key(&self, env: Env) -> Result<JsObject> {
+        let _keys: HashMap<String, String> = self
             .inner
             .fallback_key()
             .into_iter()
             .map(|(k, v)| (k.to_base64(), v.to_base64()))
             .collect();
 
-        Ok(serde_json::to_string(&keys).unwrap())
+        let mut res = env.create_object().unwrap();
+        for (key, value) in _keys.iter() {
+            res.set(key, value)?;
+        }
+        Ok(res)
     }
 
     #[napi]

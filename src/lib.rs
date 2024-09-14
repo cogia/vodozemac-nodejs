@@ -41,6 +41,12 @@ impl SessionConfig {
     }
 }
 
+#[napi(object)]
+pub struct IdentityKeys {
+    pub ed25519: String,
+    pub curve25519: String,
+}
+
 #[napi]
 pub struct OlmMessage {
     pub ciphertext: String,
