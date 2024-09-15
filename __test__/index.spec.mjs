@@ -39,9 +39,11 @@ test('Account sessions', (t) => {
 
   const session = alice.createOutboundSession(bob.curve25519Key, Object.values(bob.oneTimeKeys)[0]);
   const res = session.encrypt('Hello there')
-  console.log('res', res, res.ciphertext, res.messageType)
-  console.log('decrypt', session.decrypt(res))
-  t.pass()
+  let { plaintext: decrypted, session: bob_session } = bob.createInboundSession(alice.curve25519Key, res);
+  t.true(decrypted  === 'Hello there')
+  const message = bob_session.encrypt('ddddd');
+  const decrypted2 = session.decrypt(message);
+  t.true(decrypted2 === 'ddddd')
   ///t.true(isString(res))
    //       bob.curve25519_key(),
    //   *bob.one_time_keys().values().next().unwrap(),

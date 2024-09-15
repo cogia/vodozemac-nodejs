@@ -23,9 +23,8 @@ export declare class Account {
   generateFallbackKey(): void
   markKeysAsPublished(): void
   createOutboundSession(identityKey: string, oneTimeKey: string): Session
-  createInboundSession(identityKey: string, message: OlmMessage): InboundCreationResult
+  createInboundSession(identityKey: string, message: OlmMessage): { session: Session, plaintext: string }
 }
-export declare class InboundCreationResult { }
 export declare class Session {
   pickle(pickleKey: string): string
   static fromPickle(pickle: string, pickleKey: string): Session

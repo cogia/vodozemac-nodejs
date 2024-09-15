@@ -1,7 +1,7 @@
-
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use vodozemac::{base64_decode, base64_encode};
+use napi::*;
 use super::OlmMessage;
 
 #[napi]
@@ -9,7 +9,6 @@ pub struct Session {
     pub(super) inner: vodozemac::olm::Session,
 }
 
-// Error::new(Status::GenericFailure, err)
 #[napi]
 impl Session {
     #[napi]

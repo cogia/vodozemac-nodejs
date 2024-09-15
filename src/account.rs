@@ -1,45 +1,17 @@
 use std::collections::HashMap;
 use napi::bindgen_prelude::*;
-use napi::JsObject;
+use napi::{JsObject};
 use napi_derive::napi;
+use vodozemac::base64_decode;
 use vodozemac::olm::SessionConfig;
 
 
-use super::{session::Session, OlmMessage, IdentityKeys};
+use super::{session::Session,  OlmMessage, IdentityKeys};
+
 
 #[napi]
 pub struct Account {
     inner: vodozemac::olm::Account,
-}
-#[repr(C)]
-#[napi]
-pub struct InboundCreationResult {
-    session: Session,
-    plaintext: String,
-}
-
-/*
-impl InboundCreationResult {
-
-    pub fn session(&self) -> Session {
-        self.session
-    }
-
-
-    pub fn plaintext(&self) -> String {
-        self.plaintext.clone()
-    }
-}*/
-
-impl From<vodozemac::olm::InboundCreationResult> for InboundCreationResult {
-    fn from(result: vodozemac::olm::InboundCreationResult) -> Self {
-        Self {
-            session: Session {
-                inner: result.session,
-            },
-            plaintext: String::from_utf8(result.plaintext).unwrap(),
-        }
-    }
 }
 
 #[napi]
@@ -138,6 +110,7 @@ impl Account {
         self.inner.generate_one_time_keys(count.try_into().unwrap());
     }
 
+
     #[napi(getter)]
     pub fn fallback_key(&self, env: Env) -> Result<JsObject> {
         let _keys: HashMap<String, String> = self
@@ -182,29 +155,36 @@ impl Account {
         Ok(Session { inner: session })
     }
 
-    #[napi]
+    #[napi(ts_return_type = "{ session: Session, plaintext: string }")]
     pub fn create_inbound_session(
         &mut self,
         identity_key: String,
         message: &OlmMessage,
-    ) -> Result<InboundCreationResult> {
+        env: Env
+    ) -> Result<JsObject> {
         let identity_key =
-            vodozemac::Curve25519PublicKey::from_base64(&identity_key).unwrap();
+            vodozemac::Curve25519PublicKey::from_base64(&identity_key)
+                .map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
 
-        let message =
-            vodozemac::olm::OlmMessage::from_parts(message.message_type.try_into().unwrap(), &message.ciphertext.as_bytes()).unwrap();
-
-        if let vodozemac::olm::OlmMessage::PreKey(message) = message {
-            Ok(self
-                .inner
-                .create_inbound_session(identity_key, &message)
-                .map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?
-                .into()
+        let _message = vodozemac::olm::OlmMessage::from_parts(
+                message.message_type.try_into().unwrap(),
+                &(base64_decode(&message.ciphertext).unwrap())
+               // &message.ciphertext.as_bytes()
             )
+                .map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
+
+        if let vodozemac::olm::OlmMessage::PreKey(m) = _message {
+            let res = self
+                .inner
+                .create_inbound_session(identity_key, &m)
+                .map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
+
+            let mut obj = env.create_object().unwrap();
+            let _ = obj.set("session", Session { inner: res.session })?;
+            let _ = obj.set("plaintext", String::from_utf8_lossy(&res.plaintext).to_string())?;
+            Ok(obj)
         } else {
             Err(Error::new(Status::GenericFailure, "Invalid message type, expected a pre-key message"))
-            //napi::Error::from_reason("Invalid message type, expected a pre-key message");
-           // throw_error("Invalid message type, expected a pre-key message")
         }
     }
 }

@@ -310,10 +310,9 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { Account, InboundCreationResult, Session, Sas, EstablishedSas, SasBytes, GroupSession, DecryptedMessage, InboundGroupSession, SessionConfig, OlmMessage } = nativeBinding
+const { Account, Session, Sas, EstablishedSas, SasBytes, GroupSession, DecryptedMessage, InboundGroupSession, SessionConfig, OlmMessage } = nativeBinding
 
 module.exports.Account = Account
-module.exports.InboundCreationResult = InboundCreationResult
 module.exports.Session = Session
 module.exports.Sas = Sas
 module.exports.EstablishedSas = EstablishedSas
