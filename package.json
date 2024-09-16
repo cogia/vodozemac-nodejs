@@ -1,13 +1,14 @@
 {
   "name": "vodozemac-nodejs",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "description": "Nodejs bindings for Matrix vodozemac by Cogia Intelligence",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
     "name": "vodozemac-nodejs",
     "triples": {}
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@napi-rs/cli": "^2.18.4",
     "@types/node": "^22.5.4",
