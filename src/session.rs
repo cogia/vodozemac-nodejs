@@ -51,7 +51,10 @@ impl Session {
     #[napi]
     pub fn session_matches(&self, message: &OlmMessage) -> bool {
         let message =
-            vodozemac::olm::OlmMessage::from_parts(message.message_type.try_into().unwrap(), &message.ciphertext.as_bytes());
+            vodozemac::olm::OlmMessage::from_parts(
+                message.message_type.try_into().unwrap(),
+                &base64_decode(&message.ciphertext).unwrap()
+            );
 
         match message {
             Ok(m) => {

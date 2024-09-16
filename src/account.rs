@@ -143,7 +143,10 @@ impl Account {
         &self,
         identity_key: String,
         one_time_key: String,
+        config: &crate::SessionConfig
     ) -> Result<Session> {
+        let _config = if config.version() == 2 { vodozemac::megolm::SessionConfig::version_2() } else { vodozemac::megolm::SessionConfig::version_1() };
+
         let identity_key =
             vodozemac::Curve25519PublicKey::from_base64(&identity_key).map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
         let one_time_key =

@@ -40,17 +40,20 @@ impl GroupSession {
     pub fn encrypt(&mut self, plaintext: String) -> String {
         self.inner.encrypt(&plaintext).to_base64()
     }
+
     #[napi]
-    pub fn pickle(&self, pickle_key: &[u8]) -> Result<String> {
+    pub fn pickle(&self, pickle_key: String) -> Result<String> {
         let pickle_key: &[u8; 32] = pickle_key
+            .as_bytes()
             .try_into()
             .map_err(|_| Error::new(Status::GenericFailure, "Invalid pickle key length, expected 32 bytes"))?;
 
         Ok(self.inner.pickle().encrypt(pickle_key))
     }
     #[napi]
-    pub fn from_pickle(pickle: String, pickle_key: &[u8]) -> Result<GroupSession> {
+    pub fn from_pickle(pickle: String, pickle_key: String) -> Result<GroupSession> {
         let pickle_key: &[u8; 32] = pickle_key
+            .as_bytes()
             .try_into()
             .map_err(|_| Error::new(Status::GenericFailure, "Invalid pickle key length, expected 32 bytes"))?;
         let pickle = vodozemac::megolm::GroupSessionPickle::from_encrypted(&pickle, pickle_key)
@@ -128,8 +131,9 @@ impl InboundGroupSession {
         Ok(self.inner.pickle().encrypt(pickle_key))
     }
     #[napi]
-    pub fn from_pickle(pickle: String, pickle_key: &[u8]) -> Result<InboundGroupSession> {
+    pub fn from_pickle(pickle: String, pickle_key: String) -> Result<InboundGroupSession> {
         let pickle_key: &[u8; 32] = pickle_key
+            .as_bytes()
             .try_into()
             .map_err(|_| Error::new(Status::GenericFailure, "Invalid pickle key length, expected 32 bytes"))?;
         let pickle =
@@ -143,9 +147,9 @@ impl InboundGroupSession {
     #[napi]
     pub fn from_libolm_pickle(
         pickle: String,
-        pickle_key: &[u8],
+        pickle_key: String,
     ) -> Result<InboundGroupSession> {
-        let inner = vodozemac::megolm::InboundGroupSession::from_libolm_pickle(&pickle, pickle_key)
+        let inner = vodozemac::megolm::InboundGroupSession::from_libolm_pickle(&pickle, &pickle_key.as_bytes())
             .map_err(|err: _| Error::new(Status::GenericFailure, err.to_string().to_owned()))?;
 
         Ok(Self { inner })

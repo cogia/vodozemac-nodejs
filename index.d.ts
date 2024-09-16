@@ -22,7 +22,7 @@ export declare class Account {
   get fallbackKey(): object
   generateFallbackKey(): void
   markKeysAsPublished(): void
-  createOutboundSession(identityKey: string, oneTimeKey: string): Session
+  createOutboundSession(identityKey: string, oneTimeKey: string, config: SessionConfig): Session
   createInboundSession(identityKey: string, message: OlmMessage): { session: Session, plaintext: string }
 }
 export declare class Session {
@@ -38,7 +38,11 @@ export declare class Sas {
   constructor()
   get publicKey(): string
 }
-export declare class EstablishedSas { }
+export declare class EstablishedSas {
+  calculateMac(input: string, info: string): string
+  calculateMacInvalidBase64(input: string, info: string): string
+  verifyMac(input: string, info: string, tag: string): void
+}
 export declare class SasBytes {
   get emojiIndices(): Array<number>
   get decimals(): Array<number>
@@ -49,8 +53,8 @@ export declare class GroupSession {
   get sessionKey(): string
   get messageIndex(): number
   encrypt(plaintext: string): string
-  pickle(pickleKey: Uint8Array): string
-  static fromPickle(pickle: string, pickleKey: Uint8Array): GroupSession
+  pickle(pickleKey: string): string
+  static fromPickle(pickle: string, pickleKey: string): GroupSession
 }
 export declare class DecryptedMessage {
   plaintext: string
@@ -64,8 +68,8 @@ export declare class InboundGroupSession {
   exportAt(index: number): string | null
   decrypt(ciphertext: string): DecryptedMessage
   pickle(pickleKey: Uint8Array): string
-  static fromPickle(pickle: string, pickleKey: Uint8Array): InboundGroupSession
-  static fromLibolmPickle(pickle: string, pickleKey: Uint8Array): InboundGroupSession
+  static fromPickle(pickle: string, pickleKey: string): InboundGroupSession
+  static fromLibolmPickle(pickle: string, pickleKey: string): InboundGroupSession
 }
 export declare class SessionConfig {
   /** Get the numeric version of this `SessionConfig`. */

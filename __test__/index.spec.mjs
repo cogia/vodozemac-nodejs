@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import {Account} from '../index.js'
+import {Account, SessionConfig} from '../index.js'
 import {isObject, isString} from "lodash-es";
 
 test('Account init from native', (t) => {
@@ -37,7 +37,7 @@ test('Account sessions', (t) => {
 
   bob.generateOneTimeKeys(1);
 
-  const session = alice.createOutboundSession(bob.curve25519Key, Object.values(bob.oneTimeKeys)[0]);
+  const session = alice.createOutboundSession(bob.curve25519Key, Object.values(bob.oneTimeKeys)[0], SessionConfig.version2());
   const res = session.encrypt('Hello there')
   let { plaintext: decrypted, session: bob_session } = bob.createInboundSession(alice.curve25519Key, res);
   t.true(decrypted  === 'Hello there')
