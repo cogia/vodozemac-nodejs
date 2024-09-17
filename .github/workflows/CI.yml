@@ -165,6 +165,7 @@ jobs:
         shell: bash
       - name: Test bindings
         run: docker run --rm -v $(pwd):/build -w /build node:${{ matrix.node }}-slim yarn test
+
   publish:
     name: Publish
     runs-on: ubuntu-latest
@@ -201,8 +202,9 @@ jobs:
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             npm publish --tag next --access public
           else
+            npm publish --scope=@cogia
             echo "Not a release, skipping publish"
           fi
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.GITH__TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
