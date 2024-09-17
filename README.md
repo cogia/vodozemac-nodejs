@@ -16,7 +16,9 @@ Installation
 ========
 
 > git clone https://github.com/username/repo-name.git
+
 > yarn 
+
 > yarn build && yarn test
 
 
