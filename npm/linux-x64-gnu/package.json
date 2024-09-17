@@ -1,5 +1,5 @@
 {
-  "name": "vodozemac-nodejs-linux-x64-gnu",
+  "name": "@cogia/vodozemac-nodejs-linux-x64-gnu",
   "version": "0.0.1",
   "os": [
     "linux"
@@ -11,9 +11,14 @@
   "files": [
     "vodozemac-nodejs.linux-x64-gnu.node"
   ],
-  "license": "MIT",
+  "description": "Nodejs bindings for Matrix vodozemac by Cogia Intelligence",
+  "author": "Cogia Intelligence",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">= 10"
+  },
+  "repository": {
+    "url": "https://github.com/cogia/vodozemac-nodejs.git"
   },
   "libc": [
     "glibc"

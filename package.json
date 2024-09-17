@@ -1,5 +1,5 @@
 {
-  "name": "vodozemac-nodejs",
+  "name": "@cogia/vodozemac-nodejs",
   "version": "0.0.1",
   "author": "Cogia Intelligence",
   "description": "Nodejs bindings for Matrix vodozemac by Cogia Intelligence",

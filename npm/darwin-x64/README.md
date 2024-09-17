@@ -1,3 +1,3 @@
-# `vodozemac-nodejs-darwin-x64`
+# `@cogia/vodozemac-nodejs-darwin-x64`
 
-This is the **x86_64-apple-darwin** binary for `vodozemac-nodejs`
+This is the **x86_64-apple-darwin** binary for `@cogia/vodozemac-nodejs`

@@ -1,5 +1,5 @@
 {
-  "name": "vodozemac-nodejs-win32-x64-msvc",
+  "name": "@cogia/vodozemac-nodejs-win32-x64-msvc",
   "version": "0.0.1",
   "os": [
     "win32"
@@ -11,8 +11,13 @@
   "files": [
     "vodozemac-nodejs.win32-x64-msvc.node"
   ],
-  "license": "MIT",
+  "description": "Nodejs bindings for Matrix vodozemac by Cogia Intelligence",
+  "author": "Cogia Intelligence",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">= 10"
+  },
+  "repository": {
+    "url": "https://github.com/cogia/vodozemac-nodejs.git"
   }
 }

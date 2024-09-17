@@ -1,5 +1,5 @@
 {
-  "name": "vodozemac-nodejs-darwin-x64",
+  "name": "@cogia/vodozemac-nodejs-darwin-x64",
   "version": "0.0.1",
   "os": [
     "darwin"
@@ -11,8 +11,13 @@
   "files": [
     "vodozemac-nodejs.darwin-x64.node"
   ],
-  "license": "MIT",
+  "description": "Nodejs bindings for Matrix vodozemac by Cogia Intelligence",
+  "author": "Cogia Intelligence",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">= 10"
+  },
+  "repository": {
+    "url": "https://github.com/cogia/vodozemac-nodejs.git"
   }
 }
