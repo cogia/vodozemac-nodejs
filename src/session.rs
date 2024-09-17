@@ -1,4 +1,3 @@
-use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use vodozemac::{base64_decode, base64_encode};
 use napi::*;
