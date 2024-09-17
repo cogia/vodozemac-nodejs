@@ -202,7 +202,6 @@ jobs:
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
             npm publish --tag next --access public
           else
-            npm publish --scope=@cogia
             echo "Not a release, skipping publish"
           fi
         env:
