@@ -182,6 +182,7 @@ jobs:
           node-version: 20
           cache: yarn
           registry-url: "https://registry.npmjs.org"
+          always-auth: true
       - name: Install dependencies
         run: yarn install
       - name: Download all artifacts
@@ -195,6 +196,7 @@ jobs:
         shell: bash
       - name: Publish
         run: |
+          npm whoami
           npm config set provenance true
           if git log -1 --pretty=%B | grep "[0-9]\+\.[0-9]\+\.[0-9]\+$";
           then

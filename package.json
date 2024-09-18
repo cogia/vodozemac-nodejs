@@ -6,7 +6,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "repository": {
-    "url": "https://github.com/cogia/vodozemac-nodejs.git"
+    "url": "git+https://github.com/cogia/vodozemac-nodejs.git"
   },
   "napi": {
     "name": "vodozemac-nodejs",
