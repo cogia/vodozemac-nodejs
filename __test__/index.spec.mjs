@@ -54,7 +54,7 @@ test('Account sessions', (t) => {
 
   // one time key removes on first usage
   t.false(isEqual(bobOnetimeKeys, Object.values(bob.oneTimeKeys)))
-  t.false(bobOnetimeKeys.includes(bobFirstOnetimeKey))
+  t.false(Object.values(bob.oneTimeKeys).includes(bobFirstOnetimeKey))
   ///t.true(isString(res))
    //       bob.curve25519_key(),
    //   *bob.one_time_keys().values().next().unwrap(),
