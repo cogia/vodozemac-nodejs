@@ -18,7 +18,7 @@
     "node": ">= 10"
   },
   "repository": {
-    "url": "https://github.com/cogia/vodozemac-nodejs.git"
+    "url": "git+https://github.com/cogia/vodozemac-nodejs.git"
   },
   "libc": [
     "glibc"
