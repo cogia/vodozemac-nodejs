@@ -1,6 +1,6 @@
 {
   "name": "@cogia/vodozemac-nodejs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Cogia Intelligence",
   "description": "Nodejs bindings for Matrix vodozemac by Cogia Intelligence",
   "main": "index.js",
@@ -34,10 +34,5 @@
     "universal": "napi universal",
     "version": "napi version"
   },
-  "packageManager": "yarn@4.4.1",
-  "optionalDependencies": {
-    "@cogia/vodozemac-nodejs-win32-x64-msvc": "0.0.1-dev",
-    "@cogia/vodozemac-nodejs-darwin-x64": "0.0.1-dev",
-    "@cogia/vodozemac-nodejs-linux-x64-gnu": "0.0.1-dev"
-  }
+  "packageManager": "yarn@4.4.1"
 }
