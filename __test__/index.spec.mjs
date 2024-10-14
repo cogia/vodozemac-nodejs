@@ -1,8 +1,7 @@
 import test from 'ava'
 
-import {Account, SessionConfig} from '../index.js'
+import {Account, SessionConfig, OlmMessage} from '../index.js'
 import {isEqual, isObject, isString} from "lodash-es";
-import {equal} from "node:assert";
 
 test('Account init from native', (t) => {
   const acc = new Account()
@@ -52,6 +51,17 @@ test('Account sessions', (t) => {
   const decrypted2 = session.decrypt(message);
   t.true(decrypted2 === 'ddddd')
 
+  try {
+    session.decrypt(new OlmMessage(0, 'sadasdss'));
+  } catch (err) {
+   // console.log('session.decrypt;', err)
+  }
+
+  try {
+    session.sessionMatches(new OlmMessage(0, 'sadasdss'));
+  } catch (err) {
+    console.log('sessionMatches;', err)
+  }
   // one time key removes on first usage
   t.false(isEqual(bobOnetimeKeys, Object.values(bob.oneTimeKeys)))
   t.false(Object.values(bob.oneTimeKeys).includes(bobFirstOnetimeKey))
