@@ -1,10 +1,11 @@
 {
   "name": "@cogia/vodozemac-nodejs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Cogia Intelligence",
   "description": "Nodejs bindings for Matrix vodozemac by Cogia Intelligence",
   "main": "index.js",
   "types": "index.d.ts",
+  "registry": "https://registry.npmjs.org",
   "repository": {
     "url": "git+https://github.com/cogia/vodozemac-nodejs.git"
   },
