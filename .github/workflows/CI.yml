@@ -28,16 +28,20 @@ jobs:
           - host: macos-latest
             target: x86_64-apple-darwin
             build: yarn build --target x86_64-apple-darwin
+            rust_channel: stable
           - host: macos-latest
             target: arm64-apple-darwin
             build: yarn build --target arm64-apple-darwin
+            rust_channel: nightly-2024-10-24
           - host: windows-latest
             build: yarn build --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
+            rust_channel: stable
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
             build: yarn build --target x86_64-unknown-linux-gnu
+            rust_channel: stable
     name: stable - ${{ matrix.settings.target }} - node@20
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -49,10 +53,10 @@ jobs:
           node-version: 20
           cache: yarn
       - name: Install
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@${{ matrix.settings.rust_channel }}
         if: ${{ !matrix.settings.docker }}
         with:
-          toolchain: stable
+          toolchain: ${{ matrix.settings.rust_channel }}
           targets: ${{ matrix.settings.target }}
       - name: Cache cargo
         uses: actions/cache@v4
