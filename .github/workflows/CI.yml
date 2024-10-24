@@ -53,7 +53,7 @@ jobs:
           node-version: 20
           cache: yarn
       - name: Install
-        uses: dtolnay/rust-toolchain@${{ matrix.settings.rust_channel }}
+        uses: dtolnay/rust-toolchain@master
         if: ${{ !matrix.settings.docker }}
         with:
           toolchain: ${{ matrix.settings.rust_channel }}
