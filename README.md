@@ -22,6 +22,9 @@ Installation
 > yarn build && yarn test
 
 
+> npm publish --access public
+
+
 Usage
 ========
 Please check official documentation
