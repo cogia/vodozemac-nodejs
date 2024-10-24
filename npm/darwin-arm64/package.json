@@ -1,15 +1,15 @@
 {
-  "name": "@cogia/vodozemac-nodejs-darwin-x64",
+  "name": "@cogia/vodozemac-nodejs-darwin-arm64",
   "version": "0.0.4",
   "os": [
     "darwin"
   ],
   "cpu": [
-    "x64"
+    "arm64"
   ],
-  "main": "vodozemac-nodejs.darwin-x64.node",
+  "main": "vodozemac-nodejs.darwin-arm64.node",
   "files": [
-    "vodozemac-nodejs.darwin-x64.node"
+    "vodozemac-nodejs.darwin-arm64.node"
   ],
   "description": "Nodejs bindings for Matrix vodozemac by Cogia Intelligence",
   "author": "Cogia Intelligence",
