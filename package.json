@@ -39,11 +39,5 @@
     "universal": "napi universal",
     "version": "napi version"
   },
-  "packageManager": "yarn@4.4.1",
-  "optionalDependencies": {
-    "@cogia/vodozemac-nodejs-win32-x64-msvc": "0.0.7",
-    "@cogia/vodozemac-nodejs-darwin-x64": "0.0.7",
-    "@cogia/vodozemac-nodejs-linux-x64-gnu": "0.0.7",
-    "@cogia/vodozemac-nodejs-darwin-arm64": "0.0.7"
-  }
+  "packageManager": "yarn@4.4.1"
 }
