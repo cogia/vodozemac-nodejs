@@ -14,8 +14,7 @@ NodeJS binding for the [Matrix vodozemac](https://github.com/matrix-org/vodozema
 
 Installation
 ========
-
-> git clone https://github.com/username/repo-name.git
+> git clone https://github.com/cogia/vodozemac-nodejs.git
 
 > yarn 
 
