@@ -1,6 +1,6 @@
 {
   "name": "@cogia/vodozemac-nodejs-win32-x64-msvc",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "os": [
     "win32"
   ],
@@ -19,10 +19,5 @@
   },
   "repository": {
     "url": "git+https://github.com/cogia/vodozemac-nodejs.git"
-  },
-  "optionalDependencies": {
-    "@cogia/vodozemac-nodejs-win32-x64-msvc": "0.0.1",
-    "@cogia/vodozemac-nodejs-darwin-x64": "0.0.1",
-    "@cogia/vodozemac-nodejs-linux-x64-gnu": "0.0.1"
   }
 }

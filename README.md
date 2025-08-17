@@ -20,6 +20,9 @@ Installation
 
 > yarn build && yarn test
 
+> npm install -g npm@latest
+
+> npm config set registry https://registry.npmjs.org/
 
 > npm publish --access public
 
