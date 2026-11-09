@@ -1,6 +1,6 @@
 {
   "name": "@cogia/vodozemac-nodejs-win32-x64-msvc",
-  "version": "0.0.10",
+  "version": "0.0.12",
   "os": [
     "win32"
   ],
